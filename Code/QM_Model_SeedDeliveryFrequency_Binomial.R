@@ -12,17 +12,21 @@ seed.dist.nsl<- read.csv("Data/seed.dist.nsl_siteinfo.csv", header=TRUE)
 ## Making a binomial model using presence/absence of lodgepole pine seeds by 
 ## distance. TRI is the terrain ruggedness index and dist.m is the distance from
 ## a forest edge.
-delivfreq.binomial<- glm(deliv.freq.pico~dist.m*max.TRI.30, data= seed.dist.nsl, family = "binomial")
+delivfreq.binomial<- glm(deliv.freq.pico~dist.m*max.TRI.30, data= seed.dist.nsl, 
+                         family = "binomial")
 
 ## plotting data just to see
 ggplot(data= seed.dist.nsl, aes(x= dist.m,y= deliv.freq.pico, color= max.TRI.30))+
   geom_point()
 
 ## generating predictions based on model
-dist.m<- rep(seq(0,100, 1),2) # want the model to give me predictions up to 100 m from forest edge
-max.TRI.30 <- c(rep(3, 101), rep(10, 101)) # want predictions for a "low" TRI and a "high" TRI
+dist.m<- rep(seq(0,100, 1),2) # want the model to give me predictions up to 100 
+                              # m from forest edge
+max.TRI.30 <- c(rep(3, 101), rep(10, 101)) # want predictions for a "low" TRI 
+                                           # and a "high" TRI
 LogOdds<- predict(delivfreq.binomial, newdata= data.frame(dist.m, max.TRI.30))
-expected.delivfreq.pico= exp(LogOdds) / (1+exp(LogOdds))
+expected.delivfreq.pico= exp(LogOdds) / (1+exp(LogOdds)) # convert back into a 
+                                                         # proportion
 
 ## putting model predictions into a new dataframe
 preddata.TRI.binomilafrequeny<- data.frame(dist.m, max.TRI.30, expected.delivfreq.pico)
