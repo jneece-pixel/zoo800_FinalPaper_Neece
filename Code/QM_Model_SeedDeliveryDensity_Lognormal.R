@@ -16,16 +16,6 @@ seed.dist.nsl<- read.csv("Data/seed.dist.nsl_siteinfo.csv", header=TRUE)
 ## model
 seed.dist.nozeros.pico<- subset(seed.dist.nsl, seeds.m2.pico>0)
 
-## Creating a column for surveyed area by multiplying the number of traps (n) by
-## the trap area (0.1512 m2).
-seed.dist.nozeros.pico$trap.area <- with(seed.dist.nozeros.pico, 
-                                         0.1512*n)
-
-## Plotting response variable to check the distribution
-hist(seed.dist.nozeros.pico$seeds.m2.pico)
-# strongly right-skewed, so I'll try a log-transformation
-hist(log(seed.dist.nozeros.pico$seeds.m2.pico))
-
 ## making model
 lognorm.seeddensity.pico <- lm(log(seeds.m2.pico) ~ dist.m + max.TRI.30, 
                               data = seed.dist.nozeros.pico)
