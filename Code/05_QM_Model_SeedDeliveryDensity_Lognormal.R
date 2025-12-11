@@ -47,6 +47,6 @@ ggplot(prediction.data, aes(x= dist.m, y= mod.prediction))+
   labs(caption= "model for log-transformed lodgepole pine seed delivery", 
        x = "distance from forest edge (m)", 
        y = "expected seed density", 
-       color = "ruggedness")+
+       color = "Ruggedness")+
   theme_classic()
 #ggsave("Output/lognorm.seeddensity.pico.svg")
