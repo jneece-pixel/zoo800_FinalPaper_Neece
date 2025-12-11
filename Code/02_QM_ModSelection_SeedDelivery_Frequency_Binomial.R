@@ -18,14 +18,17 @@ seed.dist.nsl<- read.csv("Data/seed.dist.nsl_siteinfo.csv", header=TRUE)
 # Ruggedness
 TRI.dist.freq<-glm(deliv.freq.pico~(dist.m)+max.TRI.30, data= seed.dist.nsl, 
                    family = binomial) 
+# Positioning relative to live-forest edge
+positioning.dist.freq <- glm(deliv.freq.pico ~ dist.m + Positioning,
+                             data = seed.dist.nsl, family = "binomial")
 # Mean basal area for mature, live trees in the forest edge
-basalarea.dist.freq<-glm(deliv.freq.pico~(dist.m)+Mean.stemarea.m2.pico, 
+basalarea.dist.freq<-glm(deliv.freq.pico~dist.m + Mean.stemarea.m2.pico, 
                          data= seed.dist.nsl, family = binomial) 
 # Mean height of mature, live trees in the forest edge
-height.dist.freq<-glm(deliv.freq.pico~(dist.m)+Mean.Height.m.pico, 
+height.dist.freq<-glm(deliv.freq.pico~dist.m + Mean.Height.m.pico, 
                       data= seed.dist.nsl, family = binomial)
 # Mean abundance of non-serotinous (dispersing) cones in forest edge
-cones.dist.freq<-glm(deliv.freq.pico~(dist.m)+mean.nonser.cones.ha.pico, 
+cones.dist.freq<-glm(deliv.freq.pico~dist.m + mean.nonser.cones.ha.pico, 
                      data= seed.dist.nsl, family = binomial)
 # "null" model with only distance from the forest edge
 dist.freq<-glm(deliv.freq.pico~(dist.m), data= seed.dist.nsl, 
@@ -44,13 +47,13 @@ cones.dist.freqintrxn<-glm(deliv.freq.pico~(dist.m)*mean.nonser.cones.ha.pico,
                            data= seed.dist.nsl, family = binomial)
 
 ## Putting all candidate model into a list
-frequency.distance.mods <- list(TRI.dist.freq, basalarea.dist.freq, 
+frequency.distance.mods <- list(TRI.dist.freq, positioning.dist.freq, basalarea.dist.freq, 
                                 height.dist.freq, cones.dist.freq, 
                                 TRI.dist.freq.intrxn, basalarea.dist.freqintrxn, 
                                 height.dist.freqintrxn, cones.dist.freqintrxn, 
                                 dist.freq)
 # Making a vector of all model names
-mod.names2 <- c("TRI",  "basal.area", "height", "cones", "TRI.intrxn", 
+mod.names2 <- c("TRI",  "positioning", "basal.area", "height", "cones", "TRI.intrxn", 
                 "basal.area.intrxn", "height.intrxn", "cones.intrxn", "dist")
 # Making AICc table to compare models. Since only 9 transects collected seeds, 
 # I am using the corrected AIC for small sample sizes. 

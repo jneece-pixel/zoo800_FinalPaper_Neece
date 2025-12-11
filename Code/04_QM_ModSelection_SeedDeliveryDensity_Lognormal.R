@@ -25,6 +25,9 @@ hist(log(seed.dist.nozeros.pico$seeds.m2.pico))
 # Ruggedness
 TRI.dist.density <- lm(log(seeds.m2.pico)~ dist.m + max.TRI.30, 
                        data = seed.dist.nozeros.pico)
+# Positioning relative to forest edge
+positioning.dist.density <- lm(log(seeds.m2.pico) ~ dist.m + Positioning, 
+                          data = seed.dist.nozeros.pico)
 # Mean basal area for mature, live trees in the forest edge
 basalarea.dist.density<-lm(log(seeds.m2.pico)~dist.m+Mean.stemarea.m2.pico, 
                          data= seed.dist.nozeros.pico) 
@@ -39,6 +42,9 @@ dist.density<-lm(log(seeds.m2.pico)~dist.m, data= seed.dist.nozeros.pico)
 # interaction between distance and ruggedness
 TRI.dist.density.intrxn<-lm(log(seeds.m2.pico)~dist.m*max.TRI.30, 
                           data= seed.dist.nozeros.pico)
+# interaction between positioning and ruggedness
+positioning.dist.density.intrxn<-lm(log(seeds.m2.pico)~dist.m*Positioning, 
+                            data= seed.dist.nozeros.pico)
 # interaction between distance and basal area
 basalarea.dist.density.intrxn<-lm(log(seeds.m2.pico)~dist.m*Mean.stemarea.m2.pico, 
                                data= seed.dist.nozeros.pico)
@@ -51,14 +57,14 @@ cones.dist.density.intrxn<-lm(log(seeds.m2.pico)~dist.m*mean.nonser.cones.ha.pic
 
 
 ## Putting all candidate model into a list
-density.distance.mods <- list(TRI.dist.density, basalarea.dist.density, 
+density.distance.mods <- list(TRI.dist.density, positioning.dist.density, basalarea.dist.density, 
                                 height.dist.density, cones.dist.density, 
-                                TRI.dist.density.intrxn, basalarea.dist.density.intrxn, 
+                                TRI.dist.density.intrxn, positioning.dist.density.intrxn, basalarea.dist.density.intrxn, 
                                 height.dist.density.intrxn, cones.dist.density.intrxn, 
                                 dist.density)
 # Making a vector of all model names
-mod.names <- c("TRI",  "basal.area", "height", "cones", "TRI.intrxn", 
-                "basal.area.intrxn", "height.intrxn", "cones.intrxn", "dist")
+mod.names <- c("TRI", "positioning", "basal.area", "height", "cones", "TRI.intrxn", 
+                "positioning.intrxn", "basal.area.intrxn", "height.intrxn", "cones.intrxn", "dist")
 
 # Making AICc table to compare models. Since only 9 transects collected seeds, 
 # I am using the corrected AIC for small sample sizes. 
@@ -67,4 +73,3 @@ aictab(cand.set = density.distance.mods, modnames = mod.names)
 # The model with the interaction betweeen ruggedness and dist is also pretty good.
 
 summary(TRI.dist.density) # all predictors are significant
-summary(TRI.dist.density.intrxn) # no significant effect of the interaction term.
